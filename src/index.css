@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+nav li {
+  @apply relative before:w-2 before:h-2 before:absolute before:rounded-full before:-translate-x-1/2 before:left-1/2 before:top-7 px-7 py-[6px];
+}
