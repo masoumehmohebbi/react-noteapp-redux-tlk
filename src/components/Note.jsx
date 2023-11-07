@@ -14,6 +14,11 @@ function Note() {
     fetchNotes();
   }, []);
 
+  const handleNoteDelete = async (id) => {
+    const { error } = await supabase.from('noteapp').delete().eq('id', id);
+    console.log(error);
+  };
+
   console.log(allNotes);
   return (
     <div>
@@ -45,7 +50,7 @@ function Note() {
                     <button>
                       <BiEdit className="w-5 h-5 text-primary" />
                     </button>
-                    <button>
+                    <button onClick={() => handleNoteDelete(note.id)}>
                       <BiTrash className="w-5 h-5 text-primary" />
                     </button>
                   </div>
