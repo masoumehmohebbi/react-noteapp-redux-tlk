@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { BiPlus, BiSearch } from 'react-icons/bi';
 import Modal from './modal';
+import { useSelector } from 'react-redux';
+import { useCategory } from '../context/SelectNavCategoryContext';
+import { useCategoryNotes } from '../context/CategoryNotesContext';
 function Header() {
   return (
     <div className="">
@@ -25,15 +28,51 @@ function SearchBox() {
   );
 }
 function Navbar() {
+  const { setSlectedNotes } = useCategoryNotes();
   const [isOpenModal, setIsOpenModal] = useState(false);
+  // const [selectedCat, setSelectedCat] = useState('همه');
+  const { selectedCat, setSelectedCat } = useCategory();
+  const { notes } = useSelector((state) => state.notes);
+
+  const hanleSelectCat = (cat) => {
+    setSelectedCat(cat);
+
+    const selectedNotes = notes.filter((note) => note.category === cat);
+    setSlectedNotes(selectedNotes);
+
+    if (cat === 'همه')
+      return setSlectedNotes(notes.filter((note) => note.category !== 'همه'));
+  };
   return (
     <>
       <nav className="flex justify-between py-6 items-center">
-        <ul className="flex space-x-9 pl-9 text-primary">
-          <li className="before:bg-blue-300 rounded-lg bg-blue-300">همه</li>
-          <li className="before:bg-orange-300">خانه</li>
-          <li className="before:bg-purple-300">کار</li>
-          <li className="before:bg-green-300">شخصی</li>
+        <ul className="flex gap-x-9 pl-9 text-primary">
+          <li
+            onClick={() => hanleSelectCat('همه')}
+            className={` ${selectedCat === 'همه' && 'bg-blue-300'} before:bg-blue-300`}
+          >
+            همه
+          </li>
+          <li
+            onClick={() => hanleSelectCat('خانه')}
+            className={` ${
+              selectedCat === 'خانه' && 'bg-orange-300'
+            } before:bg-orange-300`}
+          >
+            خانه
+          </li>
+          <li
+            onClick={() => hanleSelectCat('کار')}
+            className={`${selectedCat === 'کار' && 'bg-purple-300'} before:bg-purple-300`}
+          >
+            کار
+          </li>
+          <li
+            onClick={() => hanleSelectCat('شخصی')}
+            className={`${selectedCat === 'شخصی' && 'bg-green-300'} before:bg-green-300`}
+          >
+            شخصی
+          </li>
         </ul>
         <button
           onClick={() => setIsOpenModal((is) => !is)}

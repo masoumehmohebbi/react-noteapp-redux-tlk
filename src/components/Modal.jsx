@@ -1,22 +1,28 @@
 import { useState } from 'react';
-import supabase from '../supabase';
 import SelectOption from './SelectOption';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAsyncNotes } from '../features/note/noteSlice';
 
 function Modal({ isOpenModal, setIsOpenModal }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleAddNote = async () => {
-    const newNote = {
-      title: title,
-      description: description,
-      category: selectedOption.value,
-    };
+  const { loading } = useSelector((state) => state.notes);
+  const dispatch = useDispatch();
+
+  const handleAddNote = () => {
+    if (!title || !description || !selectedOption.value) return;
+    dispatch(
+      addAsyncNotes({
+        title: title,
+        description: description,
+        category: selectedOption.value,
+      }),
+    );
     setTitle('');
     setDescription('');
     setSelectedOption(null);
-    await supabase.from('noteapp').insert(newNote);
   };
 
   if (!isOpenModal) return null;
@@ -26,7 +32,7 @@ function Modal({ isOpenModal, setIsOpenModal }) {
         onClick={() => setIsOpenModal(false)}
         className="w-screen h-screen fixed inset-0 bg-purple-300 bg-opacity-80 duration-500"
       ></div>
-      <div className="bg-white rounded-md px-4 w-3/5 min-h-[250px] -translate-x-1/2 -translate-y-1/2 absolute top-[40%] py-4 left-1/2 shadow-lg">
+      <div className="bg-white z-20 rounded-md px-4 w-4/5 sm:w-3/5 min-h-[250px] -translate-x-1/2 -translate-y-1/2 absolute top-[50%] py-4 left-1/2 shadow-lg">
         <div className="mb-6">
           <h1 className="text-lg pb-2 text-slate-700 font-semibold">
             اضافه کردن یادداشت
@@ -37,7 +43,7 @@ function Modal({ isOpenModal, setIsOpenModal }) {
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="col-span-6 border border-[#d8b4fe] shadow-md p-2 outline-none text-primary bg-purple-100 rounded-md"
+            className="col-span-9 md:col-span-6  border border-[#d8b4fe] shadow-md p-2 outline-none text-primary bg-purple-100 rounded-md"
             type="text"
             placeholder="عنوان یادداشت..."
           />
@@ -49,16 +55,19 @@ function Modal({ isOpenModal, setIsOpenModal }) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="توضیحات..."
-            className="border border-[#d8b4fe] p-2 shadow-md outline-none col-span-6 h-56 bg-purple-100 rounded-md"
+            className="border border-[#d8b4fe] p-2 shadow-md outline-none col-span-9 md:col-span-6 h-56 bg-purple-100 rounded-md"
           ></textarea>
         </div>
 
         <div className="flex gap-4 mt-6 text-primary">
           <button
+            disabled={loading}
             onClick={handleAddNote}
-            className="px-4 py-1 shadow-md bg-purple-600 hover:bg-purple-500 text-white rounded-md"
+            className={` ${
+              loading ? 'opacity-50' : 'opacity-100'
+            } px-4 py-1 shadow-md bg-purple-600 hover:bg-purple-500 text-white rounded-md`}
           >
-            اضافه
+            {loading ? 'در حال اضافه شدن' : 'اضافه'}
           </button>
           <button
             onClick={() => setIsOpenModal(false)}

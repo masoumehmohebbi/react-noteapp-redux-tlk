@@ -4,5 +4,5 @@
 @tailwind utilities;
 
 nav li {
-  @apply relative before:w-2 before:h-2 before:absolute before:rounded-full before:-translate-x-1/2 before:left-1/2 before:top-7 px-7 py-[6px];
+  @apply relative before:w-2 rounded-lg duration-500 cursor-pointer before:h-2 before:absolute before:rounded-full before:-translate-x-1/2 before:left-1/2 before:top-7 px-7 py-[6px];
 }

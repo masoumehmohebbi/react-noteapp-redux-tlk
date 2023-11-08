@@ -25,7 +25,7 @@ export default function SelectOption({ selectedOption, setSelectedOption }) {
           backgroundColor: state.isFocused ? '#d8b4fe' : '#ffffff',
         }),
       }}
-      className="col-span-3 shadow-md border border-[#d8b4fe] rounded-md"
+      className="col-span-9 md:col-span-3 shadow-md border border-[#d8b4fe] rounded-md"
       value={selectedOption}
       onChange={handleChange}
       options={options}
