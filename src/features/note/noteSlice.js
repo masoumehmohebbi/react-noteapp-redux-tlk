@@ -45,15 +45,30 @@ export const toggleAsyncNotes = createAsyncThunk(
   'notes/toggleAsyncNote',
   async (payload, { rejectWithValue }) => {
     try {
-      // const response = await api.patch(`/todos/${payload.id}`, {
-      //   completed: payload.completed,
-      // });
-
       await supabase
         .from('noteapp')
         .update({ completed: payload.completed })
         .match({ id: payload.id });
-      // const { data } = await supabase.from('noteapp').select('*');
+
+      let { data } = await supabase.from('noteapp').select('*').eq('id', payload.id);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+export const updateAsyncNotes = createAsyncThunk(
+  'notes/updateAsyncNote',
+  async (payload, { rejectWithValue }) => {
+    try {
+      await supabase
+        .from('noteapp')
+        .update({
+          title: payload.title,
+          description: payload.description,
+          category: payload.category,
+        })
+        .match({ id: payload.id });
 
       let { data } = await supabase.from('noteapp').select('*').eq('id', payload.id);
       console.log(data);
@@ -100,6 +115,12 @@ const noteSlice = createSlice({
     [toggleAsyncNotes.fulfilled]: (state, action) => {
       const selectedNote = state.notes.find((note) => note.id === action.payload[0].id);
       selectedNote.completed = action.payload[0].completed;
+    },
+    [updateAsyncNotes.fulfilled]: (state, action) => {
+      const selectedNote = state.notes.find((note) => note.id === action.payload[0].id);
+      selectedNote.title = action.payload[0].title;
+      selectedNote.description = action.payload[0].description;
+      selectedNote.category = action.payload[0].category;
     },
   },
 });

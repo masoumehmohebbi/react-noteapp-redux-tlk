@@ -83,6 +83,7 @@ function Navbar() {
           <BiPlus className="w-5 h-5 ml-2" />
         </button>
       </nav>
+
       <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} />
     </>
   );

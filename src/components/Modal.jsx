@@ -1,15 +1,21 @@
 import { useState } from 'react';
 import SelectOption from './SelectOption';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAsyncNotes } from '../features/note/noteSlice';
+import { addAsyncNotes, updateAsyncNotes } from '../features/note/noteSlice';
+import { useEffect } from 'react';
 
-function Modal({ isOpenModal, setIsOpenModal }) {
+function Modal({ isOpenModal, setIsOpenModal, editNote }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
 
   const { loading } = useSelector((state) => state.notes);
   const dispatch = useDispatch();
+  useEffect(() => {
+    setTitle(editNote?.title || '');
+    setDescription(editNote?.description || '');
+    setSelectedOption({ label: editNote?.category } || null);
+  }, [editNote]);
 
   const handleAddNote = () => {
     if (!title || !description || !selectedOption.value) return;
@@ -24,6 +30,17 @@ function Modal({ isOpenModal, setIsOpenModal }) {
     setDescription('');
     setSelectedOption(null);
   };
+  const handleUpdateNote = () => {
+    dispatch(
+      updateAsyncNotes({
+        id: editNote.id,
+        title,
+        description,
+        category: selectedOption.value,
+      }),
+    );
+    setIsOpenModal(false);
+  };
 
   if (!isOpenModal) return null;
   return (
@@ -35,7 +52,7 @@ function Modal({ isOpenModal, setIsOpenModal }) {
       <div className="bg-white z-20 rounded-md px-4 w-4/5 sm:w-3/5 min-h-[250px] -translate-x-1/2 -translate-y-1/2 absolute top-[50%] py-4 left-1/2 shadow-lg">
         <div className="mb-6">
           <h1 className="text-lg pb-2 text-slate-700 font-semibold">
-            اضافه کردن یادداشت
+            {editNote ? '  تغییر دادن یادداشت' : '  اضافه کردن یادداشت'}
           </h1>
           <div className="h-1 bg-purple-200 w-full"></div>
         </div>
@@ -60,15 +77,43 @@ function Modal({ isOpenModal, setIsOpenModal }) {
         </div>
 
         <div className="flex gap-4 mt-6 text-primary">
-          <button
+          {loading && editNote ? (
+            <button
+              disabled={loading}
+              onClick={handleAddNote}
+              className={` ${
+                loading ? 'opacity-50' : 'opacity-100'
+              } px-4 py-1 shadow-md bg-purple-600 hover:bg-purple-500 text-white rounded-md`}
+            >
+              اضافه
+            </button>
+          ) : (
+            <button
+              disabled={loading}
+              onClick={handleUpdateNote}
+              className={` ${
+                loading ? 'opacity-50' : 'opacity-100'
+              } px-4 py-1 shadow-md bg-purple-600 hover:bg-purple-500 text-white rounded-md`}
+            >
+              تغییر
+            </button>
+          )}
+
+          {/* <button
             disabled={loading}
             onClick={handleAddNote}
             className={` ${
               loading ? 'opacity-50' : 'opacity-100'
             } px-4 py-1 shadow-md bg-purple-600 hover:bg-purple-500 text-white rounded-md`}
           >
-            {loading ? 'در حال اضافه شدن' : 'اضافه'}
-          </button>
+            {loading
+              ? editNote
+                ? 'در حال تغییر '
+                : 'در حال اضافه شدن'
+              : editNote
+              ? 'تغییر '
+              : 'اضافه'}
+          </button> */}
           <button
             onClick={() => setIsOpenModal(false)}
             className="px-4 py-1 shadow-md text-primary border-2 border-red-400 hover:bg-red-400 rounded-md"
