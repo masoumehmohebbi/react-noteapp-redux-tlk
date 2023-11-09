@@ -3,22 +3,31 @@ import SelectOption from './SelectOption';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAsyncNotes, updateAsyncNotes } from '../features/note/noteSlice';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
+import { useCategory } from '../context/SelectNavCategoryContext';
 
-function Modal({ isOpenModal, setIsOpenModal, editNote }) {
+function Modal({ isOpenModal, setIsOpenModal, editNote, setEditNote }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
-
   const { loading } = useSelector((state) => state.notes);
   const dispatch = useDispatch();
+  const { setSelectedCat } = useCategory();
+
   useEffect(() => {
     setTitle(editNote?.title || '');
     setDescription(editNote?.description || '');
-    setSelectedOption({ label: editNote?.category } || null);
+
+    if (editNote?.title) {
+      setSelectedOption({ label: editNote?.category });
+    }
   }, [editNote]);
 
   const handleAddNote = () => {
-    if (!title || !description || !selectedOption.value) return;
+    if (!title || !description || !selectedOption) {
+      toast.error('پر کردن همه ی فیلدها الزامیست');
+      return;
+    }
     dispatch(
       addAsyncNotes({
         title: title,
@@ -29,6 +38,11 @@ function Modal({ isOpenModal, setIsOpenModal, editNote }) {
     setTitle('');
     setDescription('');
     setSelectedOption(null);
+    setSelectedCat('همه');
+
+    setTimeout(() => {
+      toast.success('یادداشت جدید اضافه شد');
+    }, 1500);
   };
   const handleUpdateNote = () => {
     dispatch(
@@ -36,10 +50,12 @@ function Modal({ isOpenModal, setIsOpenModal, editNote }) {
         id: editNote.id,
         title,
         description,
-        category: selectedOption.value,
+        category: selectedOption?.value,
       }),
     );
     setIsOpenModal(false);
+    setEditNote(null);
+    toast.success('آپدیت انجام شد');
   };
 
   if (!isOpenModal) return null;
@@ -49,7 +65,7 @@ function Modal({ isOpenModal, setIsOpenModal, editNote }) {
         onClick={() => setIsOpenModal(false)}
         className="w-screen h-screen fixed inset-0 bg-purple-300 bg-opacity-80 duration-500"
       ></div>
-      <div className="bg-white z-20 rounded-md px-4 w-4/5 sm:w-3/5 min-h-[250px] -translate-x-1/2 -translate-y-1/2 absolute top-[50%] py-4 left-1/2 shadow-lg">
+      <div className="bg-white z-20 rounded-md px-4 w-11/12 sm:w-3/5 min-h-[250px] -translate-x-1/2 -translate-y-1/2 absolute top-80 py-4 left-1/2 shadow-lg">
         <div className="mb-6">
           <h1 className="text-lg pb-2 text-slate-700 font-semibold">
             {editNote ? '  تغییر دادن یادداشت' : '  اضافه کردن یادداشت'}
@@ -77,7 +93,7 @@ function Modal({ isOpenModal, setIsOpenModal, editNote }) {
         </div>
 
         <div className="flex gap-4 mt-6 text-primary">
-          {loading && editNote ? (
+          {!editNote ? (
             <button
               disabled={loading}
               onClick={handleAddNote}
@@ -85,7 +101,7 @@ function Modal({ isOpenModal, setIsOpenModal, editNote }) {
                 loading ? 'opacity-50' : 'opacity-100'
               } px-4 py-1 shadow-md bg-purple-600 hover:bg-purple-500 text-white rounded-md`}
             >
-              اضافه
+              {loading ? 'در حال اضافه شدن' : 'اضافه'}
             </button>
           ) : (
             <button

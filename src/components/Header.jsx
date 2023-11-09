@@ -16,10 +16,29 @@ function Header() {
 export default Header;
 
 function SearchBox() {
+  const { selectedNotes, setSlectedNotes } = useCategoryNotes();
+  const { notes } = useSelector((state) => state.notes);
+  const { setSelectedCat } = useCategory();
+
+  const handleSearch = (e) => {
+    const filteredNotes = selectedNotes.filter((note) =>
+      (note.title || note.description)
+        .toLowerCase()
+        .includes(e.target.value.toLowerCase()),
+    );
+
+    if (!e.target.value == '') {
+      setSlectedNotes(filteredNotes);
+    } else {
+      setSlectedNotes(notes);
+      setSelectedCat('همه');
+    }
+  };
   return (
     <div className="flex items-center p-3 w-full mb-5 shadow-md bg-white">
       <BiSearch className="text-primary w-5 h-5" />
       <input
+        onChange={(e) => handleSearch(e)}
         type="text"
         className="capitalize outline-none mr-2 w-full text-primary"
         placeholder="جستجو یادداشت..."
@@ -45,8 +64,8 @@ function Navbar() {
   };
   return (
     <>
-      <nav className="flex justify-between py-6 items-center">
-        <ul className="flex gap-x-9 pl-9 text-primary">
+      <nav className="flex flex-col-reverse md:flex-row justify-between py-6 items-start md:items-center">
+        <ul className="flex md:gap-x-9 md:pl-9 text-primary">
           <li
             onClick={() => hanleSelectCat('همه')}
             className={` ${selectedCat === 'همه' && 'bg-blue-300'} before:bg-blue-300`}
@@ -76,11 +95,11 @@ function Navbar() {
         </ul>
         <button
           onClick={() => setIsOpenModal((is) => !is)}
-          className="bg-purple-500 hover:ring-2 duration-500 hover:bg-purple-600 hover:ring-purple-600 hover:ring-offset-2 hover:ring-offset-current py-[6px] px-4 justify-between flex items-center rounded-md text-white"
+          className="bg-purple-500 mb-9 absolute top-3 right-0 md:static md:mb-0 hover:ring-2 duration-500 hover:bg-purple-600 hover:ring-purple-600 hover:ring-offset-2 hover:ring-offset-current py-[6px] px-4 justify-between flex items-center rounded-md text-white"
         >
-          اضافه کردن
-          <span className="mr-[6px] hidden md:block"> یادداشت</span>
           <BiPlus className="w-5 h-5 ml-2" />
+          اضافه کردن
+          <span className="mr-[6px] block"> یادداشت</span>
         </button>
       </nav>
 

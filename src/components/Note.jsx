@@ -11,12 +11,12 @@ import { useCategoryNotes } from '../context/CategoryNotesContext';
 import { useCategory } from '../context/SelectNavCategoryContext';
 import { useState } from 'react';
 import Modal from './modal';
+import toast from 'react-hot-toast';
 
 function Note() {
   const [editNote, setEditNote] = useState(null);
-  const { selectedNotes, setSlectedNotes } = useCategoryNotes();
-  const { selectedCat, setSelectedCat } = useCategory();
-
+  const { selectedNotes } = useCategoryNotes();
+  const { setSelectedCat } = useCategory();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const { notes, loading, error } = useSelector((state) => state.notes);
   const dispatch = useDispatch();
@@ -25,19 +25,12 @@ function Note() {
     dispatch(getAsyncNotes());
   }, []);
 
-  const handleDeleteNote = (id) => {
+  const handleDeleteNote = (id, title) => {
     dispatch(deleteAsyncNotes({ id }));
-
-    console.log(selectedCat);
-    const selectedNote = notes.filter((note) => note.category === selectedCat);
-    setSlectedNotes(selectedNote);
-    console.log(selectedNotes);
+    setSelectedCat('همه');
+    toast.success(` ${title} حذف شد `);
   };
   const updateHandel = (id, title, description, category) => {
-    // setEditNote(null);
-    // const selectItem = notes.find((note) => note.id === id);
-    // console.log(selectItem);
-
     const noteData = {
       id,
       title,
@@ -48,6 +41,15 @@ function Note() {
     setIsOpenModal(true);
   };
 
+  if (!notes?.length)
+    return (
+      <div className="flex items-center justify-center mt-16 gap-x-2">
+        <img src="../../public/penciel.svg" alt="" />
+        <p className="text-lg sm:text-xl text-primary">
+          شما هنوز یادداشتی اضافه نکرده اید...
+        </p>
+      </div>
+    );
   return (
     <div>
       <ProgressNote
@@ -74,7 +76,7 @@ function Note() {
                     ? 'bg-orange-400'
                     : 'bg-green-400'
                 } shadow-lg flex flex-col gap-11 rounded-md p-2 text-primary ${
-                  note.completed ? 'bg-gray-500' : ''
+                  note.completed ? '!bg-gray-500' : ''
                 }`}
               >
                 <div className="flex justify-between items-center relative">
@@ -123,7 +125,7 @@ function Note() {
                       <BiEdit className="w-5 h-5 text-primary" />
                     </button>
 
-                    <button onClick={() => handleDeleteNote(note.id)}>
+                    <button onClick={() => handleDeleteNote(note.id, note.title)}>
                       <BiTrash className="w-5 h-5 text-primary" />
                     </button>
                   </div>
@@ -138,6 +140,7 @@ function Note() {
                   isOpenModal={isOpenModal}
                   setIsOpenModal={setIsOpenModal}
                   editNote={editNote}
+                  setEditNote={setEditNote}
                 />
               </article>
             );
