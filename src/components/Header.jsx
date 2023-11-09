@@ -65,7 +65,7 @@ function Navbar() {
   return (
     <>
       <nav className="flex flex-col-reverse md:flex-row justify-between py-6 items-start md:items-center">
-        <ul className="flex md:gap-x-9 md:pl-9 text-primary">
+        <ul className="flex gap-x-2 md:gap-x-9 md:pl-9 text-primary">
           <li
             onClick={() => hanleSelectCat('همه')}
             className={` ${selectedCat === 'همه' && 'bg-blue-300'} before:bg-blue-300`}
