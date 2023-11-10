@@ -95,7 +95,7 @@ function Navbar() {
         </ul>
         <button
           onClick={() => setIsOpenModal((is) => !is)}
-          className="bg-purple-500 mb-9 absolute top-3 right-[1px] md:static md:mb-0 hover:ring-2 duration-500 hover:bg-purple-600 hover:ring-purple-600 hover:ring-offset-2 hover:ring-offset-current py-[6px] px-4 justify-between flex items-center rounded-md text-white"
+          className="bg-purple-500 mb-9 absolute top-3 right-1 md:static md:mb-0 hover:ring-2 duration-500 hover:bg-purple-600 hover:ring-purple-600 hover:ring-offset-2 hover:ring-offset-current py-[6px] px-4 justify-between flex items-center rounded-md text-white"
         >
           <BiPlus className="w-5 h-5 ml-2" />
           اضافه کردن
