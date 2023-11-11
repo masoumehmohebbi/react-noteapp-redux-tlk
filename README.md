@@ -8,7 +8,7 @@ tThis app is devepped with Library:react-js, Css-framework:tailwindCss and Datab
   <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_3.PNG"/>
 </figure>
 
-<h3>The packages that i used:</h3>
+<h2>The packages that i used:</h2>
 <ul>
  <li>react-hot-toast</li>
  <li>react-select</li>
