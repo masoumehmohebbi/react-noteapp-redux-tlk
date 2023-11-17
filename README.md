@@ -10,6 +10,8 @@ This app is devepped with Library:react-js, Css-framework:tailwindCss and Databa
   <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_2.PNG"/>
    <br />
   <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_3.PNG"/>
+  <br />
+  <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_4.jpeg"/>
 </figure>
 
 <h2>The packages that i used:</h2>
