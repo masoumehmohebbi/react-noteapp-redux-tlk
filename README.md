@@ -6,7 +6,9 @@ This app is devepped with Library:react-js, Css-framework:tailwindCss and Databa
 
 <figure>
   <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_1.PNG"/>
+  <br />
   <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_2.PNG"/>
+   <br />
   <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_3.PNG"/>
 </figure>
 
