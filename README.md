@@ -11,7 +11,7 @@ This app is devepped with Library:react-js, Css-framework:tailwindCss and Databa
    <br />
   <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_3.PNG"/>
   <br />
-  <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_4.jpeg"/>
+  <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_4.PNG"/>
 </figure>
 
 <h2>The packages that i used:</h2>
