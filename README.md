@@ -4,6 +4,7 @@
 This app is devepped with Library:react-js, Css-framework:tailwindCss and Database:supabase The reason I developed this application is to manage the remote-state with Redux-Toolkit.
 </span>
 
+
 <figure>
   <img src="https://github.com/masoumehmohebbi/react-noteapp-redux-tlk/blob/main/App_1.PNG"/>
   <br />
