@@ -110,7 +110,7 @@ const noteSlice = createSlice({
     },
     [deleteAsyncNotes.fulfilled]: (state, action) => {
       state.loading = false;
-      state.notes = state.notes.filter((note) => note.id !== action.payload.id);
+      state.notes = state.notes?.filter((note) => note.id !== action.payload.id);
     },
     [toggleAsyncNotes.fulfilled]: (state, action) => {
       const selectedNote = state.notes.find((note) => note.id === action.payload[0].id);
